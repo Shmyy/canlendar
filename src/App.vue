@@ -1,28 +1,55 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+    <div class="left">
+      <heads></heads>
+      <bodys></bodys>
+    </div>
+    <div class="right">
+      <detail></detail>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import heads from './components/head.vue'
+import bodys from './components/bodys'
+import detail from './components/detail'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    heads,
+    bodys,
+    detail
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+#app{
+  display: flex;
+  flex-direction: row;
+
+  width: 600px;
+  height: 500px;
+  margin: 100px auto;
+  /* background-color: red; */
+  border:solid 1px  black;
+}
+
+.left{
+  display: flex;
+  flex-direction: column;
+  
+  flex: 3;
+  height: 500px;
+  /* background-color: aqua; */
+}
+.right{
+  display: flex;
+  flex: 1;
+
+  height: 500px;
+  /* background-color: orange; */
 }
 </style>
