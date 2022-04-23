@@ -3,50 +3,14 @@
         <table class="date">
             <thead>
                 <tr>
-                    <th class="head" v-for="{week,id} in week">{{week}}</th>
+                    <th class="head" v-for="(item,index) in dayname">{{item}}</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
+                <tr v-for="(week,index) in theweek()">
+                    <td v-for="(day,index2) in week">
                         <div>
-                            <span>11</span>
-                            <span>初一</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <span>11</span>
-                            <span>初一</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <span>11</span>
-                            <span>初一</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <span>11</span>
-                            <span>初一</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <span>11</span>
-                            <span>初一</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <span>11</span>
-                            <span>初一</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <span>11</span>
+                            <span>{{day}}</span>
                             <span>初一</span>
                         </div>
                     </td>
@@ -61,15 +25,35 @@ export default {
     name: 'bodys',
     data(){
         return {
-            week:[
-                {id:1,week:'一'},
-                {id:2,week:'二'},
-                {id:3,week:'三'},
-                {id:4,week:'四'},
-                {id:5,week:'五'},
-                {id:6,week:'六'},
-                {id:7,week:'七'},
-            ]
+            dayname:['一','二','三','四','五','六','七'],
+            day:[],
+            // 年
+            // year:2022,
+            // 月（从0到11，总共12个月）
+            month:4
+        }
+    },
+    mounted(){
+        var day = []
+        // 获取这个月第一天是星期几？
+        var themoon_1stday = (new Date(this.year,this.month-1,1)).getDay()
+        // 本月有多少天？
+        // 
+        console.log(themoon_1stday)
+    },
+    methods:{
+        // 返回第n周的日期序列，序号从0开始
+        theweek:function(){
+            // console.log(n)
+            var day_arr = []
+            for(var i=0;i<6;i++){
+                var week_arr = []
+                for(var j=0;j<7;j++){
+                    week_arr.push(this.day[i*7 + j])
+                }
+                day_arr.push(week_arr)
+            }
+            return day_arr
         }
     }
 }
@@ -130,5 +114,9 @@ export default {
 
 .date td:nth-child(n+6) span:nth-child(1){
     color: #f73131;
+}
+
+.date .holiday{
+
 }
 </style>
