@@ -104,6 +104,7 @@ export default {
 .choose{
   font-size: 25px;
   font-weight: 800;
+  cursor: pointer;
 }
 
 

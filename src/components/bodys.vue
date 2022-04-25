@@ -7,10 +7,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(week,index) in theweek()">
-                    <td v-for="(day,index2) in week">
+                <tr v-for="(week,index) in theweek()" v-if="day[0]">
+                    <td v-for="(day,index2) in week" :class="{'not_themonth':day.premonth || day.nextmonth}">
                         <div>
-                            <span>{{day}}</span>
+                            <span>{{day.days}}</span>
                             <span>初一</span>
                         </div>
                     </td>
@@ -28,18 +28,51 @@ export default {
             dayname:['一','二','三','四','五','六','七'],
             day:[],
             // 年
-            // year:2022,
+            year:2022,
             // 月（从0到11，总共12个月）
             month:4
         }
     },
     mounted(){
         var day = []
-        // 获取这个月第一天是星期几？
-        var themoon_1stday = (new Date(this.year,this.month-1,1)).getDay()
-        // 本月有多少天？
-        // 
-        console.log(themoon_1stday)
+        
+        // 1.获取这个月第一天是星期几？
+        var themonth_1stday = (new Date(this.year,this.month-1,1)).getDay()
+        
+        // 2.本月有多少天？
+        // 此时经典算法是判断这个月是不是1、3、5、7、8、10、12，那么就是31天，
+        //    ，4、6、9、11就是30天，2月份需要看是不是闰年
+
+        // 这个月的最后一天就是下个月的第一天减1毫秒的那天(可以知道有多少天)
+        var y = this.month == 12 ? this.year + 1 : this.year
+        var m = this.month == 12 ? 1 : this.month
+        // 日期对象减去常数表示得到时间戳，减去1表示减去1毫秒
+        var themonth_allday = new Date(new Date(y,m,1) - 1).getDate()
+    
+        // 3.上个月的最后一天是几号（同时可以知道上个月有多少天）
+        // 即这个月的第一天减去1毫秒所在的天
+        var prevmonth_lastdate = new Date(new Date(this.year,this.month - 1,1) - 1 ).getDate()
+
+        // 4.这个月的第一天是星期几，就要放入几个上个月的尾巴
+        while(themonth_1stday--){
+            day.unshift({"days":prevmonth_lastdate--,"premonth": true})
+
+        }
+        // 5.放置本月的日期
+        var count = 1
+        while(themonth_allday-- > 0){
+            day.push({"days":count++,"themonth":true})
+        }
+        // 6.补足42项（一个日历有42个格子）
+        var c = 42 - day.length
+        var count2 = 1
+        while(c-- > 0){
+            day.push({"days":count2++,"nextmonth":true})
+        }
+        // console.log(day)
+
+        this.day = day
+
     },
     methods:{
         // 返回第n周的日期序列，序号从0开始
@@ -64,7 +97,7 @@ export default {
 .bodys{
     flex: 4;
     /* background-color: green; */
-    border:solid 1px  black; 
+    /* border:solid 1px  black;  */
 }
 .date{
     width: 100%;
@@ -116,7 +149,7 @@ export default {
     color: #f73131;
 }
 
-.date .holiday{
-
+.not_themonth{
+    opacity: .4;
 }
 </style>
